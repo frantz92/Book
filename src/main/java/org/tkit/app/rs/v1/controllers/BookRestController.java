@@ -28,6 +28,8 @@ import org.tkit.quarkus.rs.exceptions.RestException;
 @Tag(name = "Books REST")
 public class BookRestController {
 
+    private static final String NOT_FOUND = "Book not found.";
+
     @Inject
     BookDAO bookDAO;
 
@@ -40,7 +42,7 @@ public class BookRestController {
     public Response getBookById(@PathParam("bookIsbn") Long bookIsbn) {
         Book book = bookDAO.findById(bookIsbn);
         if (book == null) {
-            throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, "Book not found");
+            throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
         }
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON_TYPE)
@@ -86,7 +88,7 @@ public class BookRestController {
                     .entity(bookMapper.mapToDTO(bookDAO.update(book)))
                     .build();
         }
-        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, "Book not found");
+        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 
     @DELETE
@@ -101,6 +103,6 @@ public class BookRestController {
             return Response.status(Response.Status.NO_CONTENT)
                     .build();
         }
-        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, "Book not found");
+        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 }

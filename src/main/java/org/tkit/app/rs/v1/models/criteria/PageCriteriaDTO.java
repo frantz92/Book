@@ -22,4 +22,5 @@ public class PageCriteriaDTO {
     @QueryParam("size")
     @DefaultValue("100")
     private Integer pageSize;
+
 }

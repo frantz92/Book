@@ -25,6 +25,8 @@ import java.util.Objects;
 @Tag(name = "Authors REST")
 public class AuthorRestController {
 
+    private static final String NOT_FOUND = "Author not found.";
+
     @Inject
     AuthorDAO authorDAO;
 
@@ -44,7 +46,7 @@ public class AuthorRestController {
                     .entity(authorMapper.mapToDTO(author))
                     .build();
         }
-        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, "Author not found.");
+        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 
     @GET
@@ -85,7 +87,7 @@ public class AuthorRestController {
                     .entity(authorMapper.mapToDTO(authorDAO.update(author)))
                     .build();
         }
-        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, "Author not found.");
+        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 
     @DELETE
@@ -100,6 +102,6 @@ public class AuthorRestController {
             return Response.status(Response.Status.NO_CONTENT)
                     .build();
         }
-        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, "Author not found.");
+        throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 }

@@ -1,5 +1,8 @@
 package org.tkit.app.domain.models.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BookCategory {
     HORROR,
     SCI_FI,
