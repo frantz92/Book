@@ -41,7 +41,7 @@ public class BookDAO extends AbstractDAO<Book> {
             List<Predicate> predicates = new ArrayList<>();
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             if (criteria.getBookAuthorName() != null) {
-                predicates.add(cb.equal(root.get("bookAuthor"), criteria.getBookAuthorName()));
+                predicates.add(cb.equal(root.get("bookAuthorName"), criteria.getBookAuthorName()));
             }
             if (!predicates.isEmpty()) {
                 cq.where(predicates.toArray(new Predicate[0]));
