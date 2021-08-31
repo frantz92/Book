@@ -2,7 +2,6 @@ package org.tkit.app.rs.v1.models.criteria;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.tkit.app.domain.models.entities.Author;
 import org.tkit.app.domain.models.enums.BookCategory;
 
 import javax.ws.rs.QueryParam;
@@ -23,7 +22,10 @@ public class BookSearchCriteriaDTO extends PageCriteriaDTO {
     @QueryParam("bookCategory")
     private BookCategory bookCategory;
 
-//    @QueryParam("bookAuthor")
-//    private Author bookAuthor;
+    @QueryParam("bookAuthorName")
+    private String bookAuthorName;
+
+    @QueryParam("bookAuthorSurname")
+    private String bookAuthorSurname;
 
 }

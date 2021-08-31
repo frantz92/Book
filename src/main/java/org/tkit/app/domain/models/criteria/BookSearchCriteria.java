@@ -2,7 +2,6 @@ package org.tkit.app.domain.models.criteria;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.tkit.app.domain.models.entities.Author;
 import org.tkit.app.domain.models.enums.BookCategory;
 
 @Getter
@@ -17,7 +16,9 @@ public class BookSearchCriteria {
 
     private BookCategory bookCategory;
 
-    private Author bookAuthor;
+    private String bookAuthorName;
+
+    private String bookAuthorSurname;
 
     private Integer pageNumber;
 
