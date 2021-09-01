@@ -1,0 +1,16 @@
+version: '2.4'
+services:
+  mocking-server:
+    container_name: mocking-server
+    image: rodolpheche/wiremock:2.26.3-alpine
+    labels:
+      - "test.priority=100"
+      - "test.log=true"
+      - "test.Wait.forLogMessage.regex=.*verbose:.*\\s"
+      - "test.Wait.forLogMessage.times=1"
+    ports:
+      - "9000:8080"
+    networks:
+      - test
+networks:
+  test:
