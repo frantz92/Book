@@ -1,6 +1,5 @@
 package org.tkit.app.rs.v1.services;
 
-import com.oracle.svm.core.annotate.Inject;
 import org.tkit.app.domain.daos.BookDAO;
 import org.tkit.app.domain.models.criteria.BookSearchCriteria;
 import org.tkit.app.domain.models.entities.Book;
@@ -11,6 +10,7 @@ import org.tkit.quarkus.jpa.daos.PageResult;
 import org.tkit.quarkus.rs.exceptions.RestException;
 import org.tkit.quarkus.rs.models.PageResultDTO;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
 
