@@ -10,10 +10,14 @@ import org.tkit.quarkus.jpa.daos.PageResult;
 import org.tkit.quarkus.rs.exceptions.RestException;
 import org.tkit.quarkus.rs.models.PageResultDTO;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
 
+@ApplicationScoped
+@Transactional
 public class BookServiceImpl {
 
     @Inject
