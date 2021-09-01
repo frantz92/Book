@@ -25,6 +25,7 @@ public class BookServiceImpl {
     private static final String NOT_FOUND = "Book not found.";
 
     public BookDTO getBookById(Long bookIsbn) {
+
         Book book = bookDAO.findById(bookIsbn);
 
         if (Objects.nonNull(book)) {
@@ -43,12 +44,14 @@ public class BookServiceImpl {
     }
 
     public BookDTO createBook(BookDTO bookDTO) {
+
         Book book = bookMapper.mapToEntity(bookDTO);
 
         return bookMapper.mapToDTO(bookDAO.create(book));
     }
 
     public BookDTO updateBook(Long bookIsbn, BookDTO bookDTO) {
+
         Book book = bookDAO.findById(bookIsbn);
 
         if (Objects.nonNull(book)) {
@@ -59,6 +62,7 @@ public class BookServiceImpl {
     }
 
     public Response deleteBook(Long bookIsbn) {
+
         Book book = bookDAO.findById(bookIsbn);
 
         if (Objects.nonNull(book)) {
