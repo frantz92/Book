@@ -15,7 +15,7 @@ import org.tkit.app.rs.v1.models.criteria.BookSearchCriteriaDTO;
 import org.tkit.app.rs.v1.services.BookServiceImpl;
 
 @ApplicationScoped
-@Path("/books")
+@Path("books")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Tag(name = "Books REST")
@@ -25,9 +25,9 @@ public class BookRestController {
     BookServiceImpl bookServiceImpl;
 
     @GET
-    @Path("/{bookIsbn}}")
+    @Path("/{bookIsbn}")
     @Operation(operationId = "getBookByIsbn", description = "Gets book by ISBN")
-    public Response getBookById(@PathParam("bookIsbn") Long bookIsbn) {
+    public Response getBookById(@PathParam("bookIsbn") String bookIsbn) {
 
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON_TYPE)
@@ -57,7 +57,7 @@ public class BookRestController {
     @Path("/{bookIsbn}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "updateBook", description = "Updates book info")
-    public Response updateBook(@PathParam("bookIsbn") Long bookIsbn, @Valid BookDTO bookDTO) {
+    public Response updateBook(@PathParam("bookIsbn") String bookIsbn, @Valid BookDTO bookDTO) {
 
         return Response.status(Response.Status.CREATED)
                 .entity(bookServiceImpl.updateBook(bookIsbn, bookDTO))
@@ -67,7 +67,7 @@ public class BookRestController {
     @DELETE
     @Path("/{bookIsbn}")
     @Operation(operationId = "deleteBook", description = "Removes book")
-    public Response deleteBook(@PathParam("bookIsbn") Long bookIsbn) {
+    public Response deleteBook(@PathParam("bookIsbn") String bookIsbn) {
 
         return bookServiceImpl.deleteBook(bookIsbn);
     }

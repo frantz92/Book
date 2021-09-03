@@ -10,14 +10,20 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
-@Path("/author")
+@Path("authors")
 @ApplicationScoped
+@Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Tag(name = "Authors REST")
 public class AuthorRestController {
+
+    @Context
+    UriInfo uriInfo;
 
     @Inject
     AuthorServiceImpl authorServiceImpl;
@@ -25,7 +31,7 @@ public class AuthorRestController {
     @GET
     @Path("/{id}")
     @Operation(operationId = "getAuthorById", description = "Gets Author by ID")
-    public Response getAuthorById(@PathParam("id") Long id) {
+    public Response getAuthorById(@PathParam("id") String id) {
 
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON_TYPE)
@@ -55,7 +61,7 @@ public class AuthorRestController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "updateAuthor", description = "Update Author")
-    public Response updateAuthor(@PathParam("id") Long id, @Valid AuthorDTO authorDTO) {
+    public Response updateAuthor(@PathParam("id") String id, @Valid AuthorDTO authorDTO) {
 
         return Response.status(Response.Status.CREATED)
                 .entity(authorServiceImpl.updateAuthor(id, authorDTO))
@@ -65,7 +71,7 @@ public class AuthorRestController {
     @DELETE
     @Path("/{id}")
     @Operation(operationId = "deleteAuthor", description = "Delete Author")
-    public Response deleteAuthor(@PathParam("id") Long id) {
+    public Response deleteAuthor(@PathParam("id") String id) {
 
         return authorServiceImpl.deleteAuthor(id);
     }

@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Table(name = "AUTHORS")
 public class Author extends TraceableEntity {
 
-    @Column(name = "Id", nullable = false)
-    private Long authorId;
+    @Column(name = "Id", nullable = false, unique = true)
+    private String authorId;
 
     @Column(name = "Name", nullable = false)
     private String authorName;

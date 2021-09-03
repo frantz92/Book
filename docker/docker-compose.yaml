@@ -1,0 +1,73 @@
+version: '2.4'
+
+services:
+    ########################################
+    ########### REVERSE-PROXY ##############
+    ########################################
+    traefik:
+        image: ${TRAEFIK}
+        command: --api.insecure=true --providers.docker #Enables the web UI and tells Træfik to listen to docker
+        ports:
+            - "80:80"   #The HTTP port
+            - "8082:8080" #The Web UI (enabled by --api)
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock #so Traefik can listen to the Docker events
+
+    ########################################
+    ############### DATABASE ###############
+    ########################################
+
+    postgresdb:
+        image: ${POSTGRES}
+        environment:
+            POSTGRES_PASSWORD: admin
+        ports:
+            - "5432:5432"
+            # disable volume cause windows is $hit- ./pgdata:/var/lib/postgresql/data
+        labels:
+            - "traefik.ports=5432"
+            - "traefik.frontend.rule=Host:postgresdb"
+
+    pgadmin:
+        image: ${PGADMIN}
+        environment:
+            PGADMIN_DEFAULT_EMAIL: capgemini@capgemini.com
+            PGADMIN_DEFAULT_PASSWORD: mysecretpassword
+        volumes:
+            - ./init-data/servers.json:/pgadmin4/servers.json
+            - ./pgadminvolume:/var/lib/pgadmin
+        labels:
+            - "traefik.port=80"
+            - "traefik.frontend.rule=Host:pgadmin"
+            - "traefik.http.routers.pgadmin.rule=Host(`pgadmin`)"
+
+                
+    #############################################
+    ################ Security ###################
+    #############################################
+    
+
+    keycloak-app:
+        
+        image: ${KEYCLOAK}
+        ports:
+            - "8080:8080"   #The HTTP port
+        environment:
+            SSO_ADMIN_USERNAME: admin
+            SSO_ADMIN_PASSWORD: admin
+            SSO_IMPORT_FILE: "/tmp/keycloak/local.json"
+            DB_SERVICE_PREFIX_MAPPING: postgresdb-postgresql=DB
+            TX_DATABASE_PREFIX_MAPPING: postgresdb-postgresql=DB
+            DB_JNDI: java:jboss/datasources/KeycloakDS
+            DB_USERNAME: keycloak
+            DB_PASSWORD: keycloak
+            DB_DATABASE: keycloak
+            POSTGRESDB_POSTGRESQL_SERVICE_HOST: postgresdb
+            POSTGRESDB_POSTGRESQL_SERVICE_PORT: 5432
+            KEYCLOAK_LOGLEVEL: DEBUG
+            ROOT_LOGLEVEL: DEBUG
+        volumes:
+            - ./init-data/local.json:/tmp/keycloak/local.json
+        labels:
+            - "traefik.port=80"
+            - "traefik.http.routers.keycloak-app.rule=Host(`keycloak-app`)"

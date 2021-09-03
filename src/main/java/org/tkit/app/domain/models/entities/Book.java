@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Book extends TraceableEntity {
 
     @Column(name = "ISBN", nullable = false, unique = true)
-    private Long bookIsbn;
+    private String bookIsbn;
 
     @Column(name = "TITLE", nullable = false)
     private String bookTitle;
@@ -30,7 +30,7 @@ public class Book extends TraceableEntity {
     private BookCategory bookCategory;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "AUTHOR_ID")
+    @JoinColumn(name = "AUTHOR_ID") //TODO add nullable
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Author bookAuthor;
 

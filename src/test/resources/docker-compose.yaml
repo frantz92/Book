@@ -1,0 +1,55 @@
+version: '2.4'
+services:
+  books-management-db:
+    container_name: books-management-db
+    image: bitnami/postgresql:12
+    environment:
+      POSTGRES_DB: "books-database"
+      POSTGRES_USER: "db"
+      POSTGRES_PASSWORD: "db"
+      DISABLE_WELCOME_MESSAGE: "false"
+    labels:
+      - "test.Wait.forLogMessage.regex=.*database system is ready to accept connections.*\\s"
+      - "test.Wait.forLogMessage.times=1"
+      - "test.log=true"
+      - "test.property.quarkus.datasource.jdbc.url=jdbc:postgresql://$${host:books-management-db}:$${port:booking-mgmt-db:5432}/books-management?sslmode=disable"
+    ports:
+      - "5432:5432"
+    networks:
+      - test
+
+  books-management-db-import:
+    container_name: books-management-db-import
+    image: 1000kit/dbimport:0.2.0
+    environment:
+      DB_URL: "jdbc:postgresql://booking-management-db:5432/books-management?sslmode=disable"
+      DB_USERNAME: "db"
+      DB_PASSWORD: "db"
+    ports:
+      - "8811:8090"
+    labels:
+      - "test.Wait.forLogMessage.regex=.*Installed features:.*"
+      - "test.Wait.forLogMessage.times=1"
+      - "test.log=false"
+      - "test.property.tkit.test.dbimport.url=$${url:books-management-db-import:8090}"
+    networks:
+      - test
+
+  books-management:
+    image: booking-mgmt:latest
+    ports:
+      - "8080:8090"
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://books-management-db:5432/books-management?sslmode=disable"
+    labels:
+      - "test.unit=false"
+      - "test.priority=101"
+      - "test.image.pull=DEFAULT"
+      - "test.Wait.forLogMessage.regex=.*Installed features:.*"
+      - "test.Wait.forLogMessage.times=1"
+      - "test.log=true"
+    networks:
+      - test
+
+networks:
+  test:

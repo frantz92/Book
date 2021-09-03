@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 public class AuthorSearchCriteriaDTO extends PageCriteriaDTO {
 
     @QueryParam("authorId")
-    private Long authorId;
+    private String authorId;
 
     @QueryParam("authorName")
     private String authorName;

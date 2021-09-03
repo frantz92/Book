@@ -12,7 +12,7 @@ import org.tkit.quarkus.rs.models.TraceableDTO;
 public class AuthorDTO extends TraceableDTO {
 
     @Schema(description = "Authors ID")
-    private Long authorId;
+    private String authorId;
 
     @Schema(description = "Authors name")
     private String authorName;

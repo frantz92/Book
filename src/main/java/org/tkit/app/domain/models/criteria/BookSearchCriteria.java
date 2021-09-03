@@ -8,7 +8,7 @@ import org.tkit.app.domain.models.enums.BookCategory;
 @Setter
 public class BookSearchCriteria {
 
-    private Long bookISBN;
+    private String bookISBN;
 
     private String bookTitle;
 

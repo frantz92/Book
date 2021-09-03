@@ -15,7 +15,7 @@ import org.tkit.quarkus.rs.models.TraceableDTO;
 public class BookDTO extends TraceableDTO {
 
     @Schema(description = "The book's ISBN number")
-    private Long bookIsbn;
+    private String bookIsbn;
 
     @Schema(description = "The book's title")
     private String bookTitle;
@@ -27,7 +27,7 @@ public class BookDTO extends TraceableDTO {
     private BookCategory bookCategory;
 
     @Schema(description = "The book's author")
-    private Author author;
+    private Author bookAuthor;
 
     @Override
     public String toString() {

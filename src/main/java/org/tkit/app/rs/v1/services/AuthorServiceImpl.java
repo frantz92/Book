@@ -28,7 +28,7 @@ public class AuthorServiceImpl {
     @Inject
     AuthorMapper authorMapper;
 
-    public AuthorDTO getAuthorById(Long id) {
+    public AuthorDTO getAuthorById(String id) {
 
         Author author = authorDAO.findById(id);
 
@@ -54,7 +54,7 @@ public class AuthorServiceImpl {
         return authorMapper.mapToDTO(authorDAO.create(author));
     }
 
-    public AuthorDTO updateAuthor(Long id, AuthorDTO authorDTO) {
+    public AuthorDTO updateAuthor(String id, AuthorDTO authorDTO) {
 
         Author author = authorDAO.findById(id);
 
@@ -66,7 +66,7 @@ public class AuthorServiceImpl {
 
     }
 
-    public Response deleteAuthor(Long id) {
+    public Response deleteAuthor(String id) {
 
         Author author = authorDAO.findById(id);
 

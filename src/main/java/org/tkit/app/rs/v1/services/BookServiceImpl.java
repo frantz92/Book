@@ -28,7 +28,7 @@ public class BookServiceImpl {
 
     private static final String NOT_FOUND = "Book not found.";
 
-    public BookDTO getBookById(Long bookIsbn) {
+    public BookDTO getBookById(String bookIsbn) {
 
         Book book = bookDAO.findById(bookIsbn);
 
@@ -54,7 +54,7 @@ public class BookServiceImpl {
         return bookMapper.mapToDTO(bookDAO.create(book));
     }
 
-    public BookDTO updateBook(Long bookIsbn, BookDTO bookDTO) {
+    public BookDTO updateBook(String bookIsbn, BookDTO bookDTO) {
 
         Book book = bookDAO.findById(bookIsbn);
 
@@ -65,7 +65,7 @@ public class BookServiceImpl {
         throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 
-    public Response deleteBook(Long bookIsbn) {
+    public Response deleteBook(String bookIsbn) {
 
         Book book = bookDAO.findById(bookIsbn);
 
