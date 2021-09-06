@@ -2,7 +2,6 @@ package org.tkit.app.rs.v1.models;
 
 import lombok.EqualsAndHashCode;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.tkit.app.domain.models.entities.Author;
 import org.tkit.app.domain.models.enums.BookCategory;
 
 import lombok.Getter;
@@ -27,11 +26,11 @@ public class BookDTO extends TraceableDTO {
     private BookCategory bookCategory;
 
     @Schema(description = "The book's author")
-    private Author bookAuthor;
+    private AuthorDTO bookAuthor;
 
     @Override
     public String toString() {
-        return "BookDTO:" + bookIsbn;
+        return "BookDTO:" + getId();
     }
-    
+
 }

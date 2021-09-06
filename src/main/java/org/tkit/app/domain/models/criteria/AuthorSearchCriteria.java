@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class AuthorSearchCriteria {
 
-    private String authorId;
-
     private String authorName;
 
     private String authorSurname;

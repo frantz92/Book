@@ -25,13 +25,13 @@ public class BookRestController {
     BookServiceImpl bookServiceImpl;
 
     @GET
-    @Path("/{bookIsbn}")
-    @Operation(operationId = "getBookByIsbn", description = "Gets book by ISBN")
-    public Response getBookById(@PathParam("bookIsbn") String bookIsbn) {
+    @Path("/{id}")
+    @Operation(operationId = "getBookById", description = "Gets book by ID")
+    public Response getBookById(@PathParam("id") String id) {
 
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(bookServiceImpl.getBookById(bookIsbn))
+                .entity(bookServiceImpl.getBookById(id))
                 .build();
     }
 
@@ -54,21 +54,21 @@ public class BookRestController {
     }
 
     @PUT
-    @Path("/{bookIsbn}")
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "updateBook", description = "Updates book info")
-    public Response updateBook(@PathParam("bookIsbn") String bookIsbn, @Valid BookDTO bookDTO) {
+    public Response updateBook(@PathParam("id") String id, @Valid BookDTO bookDTO) {
 
         return Response.status(Response.Status.CREATED)
-                .entity(bookServiceImpl.updateBook(bookIsbn, bookDTO))
+                .entity(bookServiceImpl.updateBook(id, bookDTO))
                 .build();
     }
 
     @DELETE
-    @Path("/{bookIsbn}")
+    @Path("/{id}")
     @Operation(operationId = "deleteBook", description = "Removes book")
-    public Response deleteBook(@PathParam("bookIsbn") String bookIsbn) {
+    public Response deleteBook(@PathParam("id") String id) {
 
-        return bookServiceImpl.deleteBook(bookIsbn);
+        return bookServiceImpl.deleteBook(id);
     }
 }

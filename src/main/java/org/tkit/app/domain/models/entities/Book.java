@@ -1,6 +1,5 @@
 package org.tkit.app.domain.models.entities;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -16,13 +15,13 @@ import javax.persistence.*;
 @Table(name = "BOOKS")
 public class Book extends TraceableEntity {
 
-    @Column(name = "ISBN", nullable = false, unique = true)
+    @Column(name = "BOOK_ISBN", nullable = false, unique = true)
     private String bookIsbn;
 
-    @Column(name = "TITLE", nullable = false)
+    @Column(name = "BOOK_TITLE", nullable = false)
     private String bookTitle;
 
-    @Column(name = "PAGES", nullable = false)
+    @Column(name = "BOOK_PAGES", nullable = false)
     private Integer bookPages;
 
     @Column(name = "BOOK_CATEGORY", nullable = false)
@@ -30,7 +29,7 @@ public class Book extends TraceableEntity {
     private BookCategory bookCategory;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "AUTHOR_ID") //TODO add nullable
+    @JoinColumn(name = "AUTHOR_GUID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Author bookAuthor;
 

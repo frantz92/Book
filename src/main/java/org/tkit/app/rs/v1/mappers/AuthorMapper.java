@@ -15,7 +15,7 @@ import org.tkit.quarkus.rs.models.PageResultDTO;
 @Mapper(componentModel = "cdi", uses = OffsetDateTimeMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AuthorMapper {
 
-    AuthorDTO mapToDTO(Author modelAuthor);
+    AuthorDTO mapToDTO(Author author);
 
     Author mapToEntity(AuthorDTO author);
 
@@ -24,6 +24,7 @@ public interface AuthorMapper {
     PageResultDTO<AuthorDTO> mapToPageResultDTO(PageResult<Author> page);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
     void updateAuthorFromDto(AuthorDTO authorDTO, @MappingTarget Author author);
 
 }

@@ -1,7 +1,9 @@
 package org.tkit.app.rs.v1.services;
 
+import org.tkit.app.domain.daos.AuthorDAO;
 import org.tkit.app.domain.daos.BookDAO;
 import org.tkit.app.domain.models.criteria.BookSearchCriteria;
+import org.tkit.app.domain.models.entities.Author;
 import org.tkit.app.domain.models.entities.Book;
 import org.tkit.app.rs.v1.mappers.BookMapper;
 import org.tkit.app.rs.v1.models.BookDTO;
@@ -26,11 +28,14 @@ public class BookServiceImpl {
     @Inject
     BookMapper bookMapper;
 
+    @Inject
+    AuthorDAO authorDAO;
+
     private static final String NOT_FOUND = "Book not found.";
 
-    public BookDTO getBookById(String bookIsbn) {
+    public BookDTO getBookById(String id) {
 
-        Book book = bookDAO.findById(bookIsbn);
+        Book book = bookDAO.findById(id);
 
         if (Objects.nonNull(book)) {
             return bookMapper.mapToDTO(book);
@@ -49,7 +54,11 @@ public class BookServiceImpl {
 
     public BookDTO createBook(BookDTO bookDTO) {
 
+        Author author = authorDAO.findById(bookDTO.getBookAuthor().getId());
+
         Book book = bookMapper.mapToEntity(bookDTO);
+
+        book.setBookAuthor(author);
 
         return bookMapper.mapToDTO(bookDAO.create(book));
     }
@@ -65,9 +74,9 @@ public class BookServiceImpl {
         throw new RestException(Response.Status.NOT_FOUND, Response.Status.NOT_FOUND, NOT_FOUND);
     }
 
-    public Response deleteBook(String bookIsbn) {
+    public Response deleteBook(String id) {
 
-        Book book = bookDAO.findById(bookIsbn);
+        Book book = bookDAO.findById(id);
 
         if (Objects.nonNull(book)) {
             bookDAO.delete(book);

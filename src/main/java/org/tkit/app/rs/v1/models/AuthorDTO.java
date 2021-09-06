@@ -11,9 +11,6 @@ import org.tkit.quarkus.rs.models.TraceableDTO;
 @EqualsAndHashCode(callSuper = false)
 public class AuthorDTO extends TraceableDTO {
 
-    @Schema(description = "Authors ID")
-    private String authorId;
-
     @Schema(description = "Authors name")
     private String authorName;
 
@@ -25,7 +22,7 @@ public class AuthorDTO extends TraceableDTO {
 
     @Override
     public String toString() {
-        return "AuthorDTO:" + authorId;
+        return "AuthorDTO:" + getId();
     }
 
 }

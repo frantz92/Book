@@ -36,17 +36,27 @@ public class AuthorDAO extends AbstractDAO<Author> {
             throw new DAOException(AuthorDAO.ErrorKeys.ERROR_FIND_AUTHORS_SEARCH_CRITERIA_REQUIRED, new NullPointerException());
         }
         try {
-            CriteriaQuery<Author> cq = criteriaQuery();
-            Root<Author> root = cq.from(Author.class);
-            List<Predicate> predicates = new ArrayList<>();
-            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Author> authorCQ = criteriaQuery();
+            Root<Author> authorRoot = authorCQ.from(Author.class);
+            List<Predicate> authorPredicates = new ArrayList<>();
+            CriteriaBuilder authorCB = getEntityManager().getCriteriaBuilder();
+
             if (criteria.getAuthorName() != null) {
-                predicates.add(cb.equal(root.get("authorName"), criteria.getAuthorName()));
+                authorPredicates.add(authorCB.equal(authorRoot.get("authorName"), criteria.getAuthorName()));
             }
-            if (!predicates.isEmpty()) {
-                cq.where(predicates.toArray(new Predicate[0]));
+
+            if (criteria.getAuthorSurname() != null) {
+                authorPredicates.add(authorCB.equal(authorRoot.get("authorSurname"), criteria.getAuthorSurname()));
             }
-            return createPageQuery(cq, Page.of(criteria.getPageNumber(), criteria.getPageSize())).getPageResult();
+
+            if (criteria.getAuthorAge() != null) {
+                authorPredicates.add(authorCB.equal(authorRoot.get("authorAge"), criteria.getAuthorAge()));
+            }
+
+            if (!authorPredicates.isEmpty()) {
+                authorCQ.where(authorPredicates.toArray(new Predicate[0]));
+            }
+            return createPageQuery(authorCQ, Page.of(criteria.getPageNumber(), criteria.getPageSize())).getPageResult();
         } catch (Exception e) {
             throw new DAOException(AuthorDAO.ErrorKeys.ERROR_FIND_AUTHORS_BY_CRITERIA, e);
         }

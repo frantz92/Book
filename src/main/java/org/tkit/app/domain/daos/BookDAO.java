@@ -36,17 +36,35 @@ public class BookDAO extends AbstractDAO<Book> {
             throw new DAOException(ErrorKeys.ERROR_FIND_BOOKS_SEARCH_CRITERIA_REQUIRED, new NullPointerException());
         }
         try {
-            CriteriaQuery<Book> cq = criteriaQuery();
-            Root<Book> root = cq.from(Book.class);
-            List<Predicate> predicates = new ArrayList<>();
-            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Book> bookCQ = criteriaQuery();
+            Root<Book> bookRoot = bookCQ.from(Book.class);
+            List<Predicate> bookPredicates = new ArrayList<>();
+            CriteriaBuilder bookCB = getEntityManager().getCriteriaBuilder();
+
+            if (criteria.getBookTitle() != null) {
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookTitle"), criteria.getBookTitle()));
+            }
+
+            if (criteria.getBookISBN() != null) {
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookIsbn"), criteria.getBookISBN()));
+            }
+
+            if (criteria.getBookPages() != null) {
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookAuthorName"), criteria.getBookAuthorName()));
+            }
+
             if (criteria.getBookAuthorName() != null) {
-                predicates.add(cb.equal(root.get("bookAuthorName"), criteria.getBookAuthorName()));
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookAuthorName"), criteria.getBookAuthorName()));
             }
-            if (!predicates.isEmpty()) {
-                cq.where(predicates.toArray(new Predicate[0]));
+
+            if (criteria.getBookAuthorSurname() != null) {
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookAuthorSurname"), criteria.getBookAuthorSurname()));
             }
-            return createPageQuery(cq, Page.of(criteria.getPageNumber(), criteria.getPageSize())).getPageResult();
+
+            if (!bookPredicates.isEmpty()) {
+                bookCQ.where(bookPredicates.toArray(new Predicate[0]));
+            }
+            return createPageQuery(bookCQ, Page.of(criteria.getPageNumber(), criteria.getPageSize())).getPageResult();
         } catch (Exception e) {
             throw new DAOException(ErrorKeys.ERROR_FIND_BOOKS_BY_CRITERIA, e);
         }
