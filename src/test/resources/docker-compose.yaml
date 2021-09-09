@@ -22,7 +22,7 @@ services:
     container_name: books-management-db-import
     image: 1000kit/dbimport:0.2.0
     environment:
-      DB_URL: "jdbc:postgresql://booking-management-db:5432/books-database?sslmode=disable"
+      DB_URL: "jdbc:postgresql://books-management-db:5432/books-database?sslmode=disable"
       DB_USERNAME: "db"
       DB_PASSWORD: "db"
     ports:
