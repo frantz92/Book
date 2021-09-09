@@ -36,7 +36,7 @@ public abstract class AbstractTest {
     @BeforeEach
     public void init() {
         if (service != null) {
-            RestAssured.port = service.getPort(8090);
+            RestAssured.port = service.getPort(8080);
             RestAssured.baseURI = "http://" + service.getHost();
         }
     }
