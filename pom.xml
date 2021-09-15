@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.tkit.app.mtsj</groupId>
-    <artifactId>booking-mgmt</artifactId>
+    <artifactId>books-management</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>booking-mgmt</name>
+    <name>books-management</name>
 
     <parent>
         <groupId>org.tkit.quarkus.app</groupId>

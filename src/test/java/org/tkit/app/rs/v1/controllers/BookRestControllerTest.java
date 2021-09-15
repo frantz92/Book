@@ -16,13 +16,12 @@ import org.tkit.quarkus.test.WithDBData;
 
 import javax.ws.rs.core.MediaType;
 
+import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.restassured.RestAssured.given;
 
-import static javax.ws.rs.core.HttpHeaders.ACCEPT;
-import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.jboss.resteasy.util.HttpHeaderNames.ACCEPT;
+import static org.jboss.resteasy.util.HttpHeaderNames.CONTENT_TYPE;
 
 @QuarkusTest
 @WithDBData(value = {"data/book-controller-test-data.xls"},
@@ -36,13 +35,13 @@ class BookRestControllerTest extends AbstractTest {
     private static final int REAL_BOOKS_AMOUNT = 3;
     private static final String REAL_BOOK_ID = "1";
     private static final String REAL_BOOK_ISBN = "73-110";
-    private static final String REAL_BOOK_TITLE = "Long time";
+    private static final String REAL_BOOK_TITLE = "Long time ago";
     private static final BookCategory REAL_BOOK_CATEGORY = BookCategory.FANTASY;
     private static final Integer REAL_BOOK_PAGES = 105;
 
     private static final String REAL_AUTHOR_ID = "1";
-    private static final String REAL_AUTHOR_NAME = "JOHN";
-    private static final String REAL_AUTHOR_SURNAME = "WAYNE";
+    private static final String REAL_AUTHOR_NAME = "John";
+    private static final String REAL_AUTHOR_SURNAME = "Wayne";
     private static final Integer REAL_AUTHOR_AGE = 29;
 
     private static final String NEW_BOOK_ID = "10";
@@ -193,11 +192,11 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Finds books by category 'FANTASY'")
-    public void testSuccessFindBooksByCategory() {
+    void testSuccessFindBooksByCategory() {
         Response response = given()
                 .when()
                 .queryParam("bookCategory", REAL_BOOK_CATEGORY)
-                .get("/books");
+                .get("/books/");
         response.then()
                 .statusCode(200);
 
@@ -217,11 +216,11 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Finds books by author name")
-    public void testSuccessFindBooksByAuthorName() {
+    void testSuccessFindBooksByAuthorName() {
         Response response = given()
                 .when()
-                .queryParam("authorName", REAL_AUTHOR_NAME)
-                .get("/books");
+                .queryParam("bookAuthorName", REAL_AUTHOR_NAME)
+                .get("/books/");
         response.then().statusCode(200);
 
         PageResultDTO<BookDTO> pageResultDTO = response.as(getBookDtoTypeRef());
@@ -233,33 +232,31 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Finds books by author surname")
-    public void testSuccessFindBooksByAuthorSurname() {
+    void testSuccessFindBooksByAuthorSurname() {
         Response response = given()
                 .when()
-                .queryParam("authorSurname", REAL_AUTHOR_SURNAME)
-                .get("/books");
+                .queryParam("bookAuthorSurname", REAL_AUTHOR_SURNAME)
+                .get("/books/");
         response.then().statusCode(200);
 
         PageResultDTO<BookDTO> pageResultDTO = response.as(getBookDtoTypeRef());
         assertThat(pageResultDTO.getTotalElements()).isEqualTo(1);
-
         assertThat(pageResultDTO.getStream()
                 .stream().allMatch(el -> el.getBookAuthor().getAuthorSurname().equals(REAL_AUTHOR_SURNAME))).isTrue();
     }
 
     @Test
     @DisplayName("Finds book by all criteria")
-    public void testSuccessFindBookByAllCriteria() {
+    void testSuccessFindBookByAllCriteria() {
         Response response = given()
                 .when()
-                .queryParam("bookIsbn", REAL_BOOK_ISBN)
+                .queryParam("bookISBN", REAL_BOOK_ISBN)
                 .queryParam("bookTitle", REAL_BOOK_TITLE)
-                .queryParam("bookPages", REAL_BOOK_PAGES)
+                .queryParam("bookPage", REAL_BOOK_PAGES)
                 .queryParam("bookCategory", REAL_BOOK_CATEGORY)
-                .queryParam("authorName", REAL_AUTHOR_NAME)
-                .queryParam("authorSurname", REAL_AUTHOR_SURNAME)
-                .queryParam("authorAge", REAL_AUTHOR_AGE)
-                .get("/books");
+                .queryParam("bookAuthorName", REAL_AUTHOR_NAME)
+               // .queryParam("bookAuthorSurname", REAL_AUTHOR_SURNAME)
+                .get("/books/");
         response.then().statusCode(200);
 
         PageResultDTO<BookDTO> pageResultDTO = response.as(getBookDtoTypeRef());
@@ -280,7 +277,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Saves book")
-    public void testSuccessSaveBook() {
+    void testSuccessSaveBook() {
 
         BookDTO newBook = setNewBookData();
 
@@ -311,7 +308,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Doesn't save book without title")
-    public void testFailSaveBookWithoutTitle() {
+    void testFailSaveBookWithoutTitle() {
 
         BookDTO newBook = setNewBookData();
 
@@ -335,7 +332,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Doesn't save book without category")
-    public void testFailSaveBookWithoutCategory() {
+    void testFailSaveBookWithoutCategory() {
 
         BookDTO newBook = setNewBookData();
 
@@ -359,7 +356,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Doesn't save book without Author")
-    public void testFailSaveBookWithoutAuthor() {
+    void testFailSaveBookWithoutAuthor() {
 
         BookDTO newBook = setNewBookData();
 
@@ -385,7 +382,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Delete book")
-    public void testSuccessDeleteBook() {
+    void testSuccessDeleteBook() {
         Response response = given().
                 when().delete("/books/" + REAL_BOOK_ID);
         response.then().
@@ -404,7 +401,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Doesn't delete book with fake ID")
-    public void testFailDeleteBookWithFakeId() {
+    void testFailDeleteBookWithFakeId() {
         Response response = given()
                 .when().delete("/books/" + FAKE_BOOK_ID);
         RFCProblemDTO rfcProblemDTO = response.as(RFCProblemDTO.class);
@@ -419,12 +416,12 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Updates book")
-    public void testSuccessUpdateBook() {
+    void testSuccessUpdateBook() {
 
-        BookDTO newBookData = setNewBookData();
+        BookDTO newBook = setNewBookData();
 
         Response putResponse = given()
-                .body(newBookData)
+                .body(newBook)
                 .header(CONTENT_TYPE, APPLICATION_JSON)
                 .header(ACCEPT, APPLICATION_JSON)
                 .when()
@@ -447,7 +444,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Doesn't update book by fake ID")
-    public void testFailUpdateBookByFakeId() {
+    void testFailUpdateBookByFakeId() {
 
         BookDTO newBookData = setNewBookData();
 
@@ -457,7 +454,7 @@ class BookRestControllerTest extends AbstractTest {
                 .header(ACCEPT, APPLICATION_JSON)
                 .when()
                 .put("/books/" + FAKE_BOOK_ID);
-        putResponse.then().statusCode(NOT_FOUND.getStatusCode());
+        putResponse.then().statusCode(404);
 
         RFCProblemDTO rfcProblemDTO = putResponse.as(RFCProblemDTO.class);
 
@@ -470,7 +467,7 @@ class BookRestControllerTest extends AbstractTest {
 
     @Test
     @DisplayName("Doesn't update book without category")
-    public void testFailUpdateBookWithoutCategory() {
+    void testFailUpdateBookWithoutCategory() {
 
         BookDTO newBookData = setNewBookData();
 
@@ -483,7 +480,7 @@ class BookRestControllerTest extends AbstractTest {
                 .when()
                 .put("/books/" + REAL_BOOK_ID);
 
-        putResponse.then().statusCode(BAD_REQUEST.getStatusCode());
+        putResponse.then().statusCode(500);
 
         RFCProblemDTO rfcProblemDTO = putResponse.as(RFCProblemDTO.class);
         Assertions.assertThat(rfcProblemDTO.getStatus().toString()).hasToString("400");

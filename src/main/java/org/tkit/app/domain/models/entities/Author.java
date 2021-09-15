@@ -19,7 +19,6 @@ public class Author extends TraceableEntity {
     private String authorSurname;
 
     @Column(name = "AUTHOR_AGE", nullable = false)
-    @Transient
     private Integer authorAge;
 
     @Override

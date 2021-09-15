@@ -41,8 +41,8 @@ public class BookDAO extends AbstractDAO<Book> {
             List<Predicate> bookPredicates = new ArrayList<>();
             CriteriaBuilder bookCB = getEntityManager().getCriteriaBuilder();
 
-            if (criteria.getBookTitle() != null) {
-                bookPredicates.add(bookCB.equal(bookRoot.get("bookTitle"), criteria.getBookTitle()));
+            if (criteria.getBookTitle() != null && !criteria.getBookTitle().isEmpty()) {
+                bookPredicates.add(bookCB.like(bookCB.lower(bookRoot.get("bookTitle")), criteria.getBookTitle().toLowerCase() + "%"));
             }
 
             if (criteria.getBookISBN() != null) {
@@ -50,15 +50,21 @@ public class BookDAO extends AbstractDAO<Book> {
             }
 
             if (criteria.getBookPages() != null) {
-                bookPredicates.add(bookCB.equal(bookRoot.get("bookAuthorName"), criteria.getBookAuthorName()));
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookPages"), criteria.getBookPages()));
             }
 
-            if (criteria.getBookAuthorName() != null) {
-                bookPredicates.add(bookCB.equal(bookRoot.get("bookAuthorName"), criteria.getBookAuthorName()));
+            if (criteria.getBookCategory() != null) {
+                bookPredicates.add(bookCB.equal(bookRoot.get("bookCategory"), criteria.getBookCategory()));
             }
 
-            if (criteria.getBookAuthorSurname() != null) {
-                bookPredicates.add(bookCB.equal(bookRoot.get("bookAuthorSurname"), criteria.getBookAuthorSurname()));
+            if (criteria.getBookAuthorName() != null && !criteria.getBookAuthorName().isEmpty()) {
+                bookPredicates.add(bookCB.like(bookCB.lower(bookRoot.get("bookAuthor").get("authorName")),
+                        criteria.getBookAuthorName().toLowerCase() + "%"));
+            }
+
+            if (criteria.getBookAuthorSurname() != null && !criteria.getBookAuthorSurname().isEmpty()) {
+                bookPredicates.add(bookCB.like(bookCB.lower(bookRoot.get("bookAuthor").get("authorSurname")),
+                        criteria.getBookAuthorSurname().toLowerCase() + "%"));
             }
 
             if (!bookPredicates.isEmpty()) {
