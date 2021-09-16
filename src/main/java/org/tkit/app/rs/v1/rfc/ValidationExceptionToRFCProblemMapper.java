@@ -74,8 +74,8 @@ public class ValidationExceptionToRFCProblemMapper implements ExceptionMapper<Va
             return new ArrayList<>();
         }
         return Arrays.stream(cause.getStackTrace())
-                     .map(this::mapStackTraceElement)
-                     .collect(Collectors.toList());
+                .map(this::mapStackTraceElement)
+                .collect(Collectors.toList());
     }
 
     private RFCProblemDetailDTO mapStackTraceElement(StackTraceElement stackTraceElement) {

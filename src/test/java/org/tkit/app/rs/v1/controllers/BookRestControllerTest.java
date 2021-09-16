@@ -16,7 +16,6 @@ import org.tkit.quarkus.test.WithDBData;
 
 import javax.ws.rs.core.MediaType;
 
-import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.restassured.RestAssured.given;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -122,7 +121,7 @@ class BookRestControllerTest extends AbstractTest {
                 .when()
                 .get("/books");
         response.then().statusCode(200);
-        PageResultDTO pageResultDTO = response.as(PageResultDTO.class);
+        PageResultDTO<?> pageResultDTO = response.as(PageResultDTO.class);
         assertThat(pageResultDTO.getSize()).isEqualTo(DEFAULT_PAGE_SIZE);
         assertThat(pageResultDTO.getTotalElements()).isEqualTo(REAL_BOOKS_AMOUNT);
         assertThat(pageResultDTO.getStream().size()).isEqualTo(REAL_BOOKS_AMOUNT);
@@ -137,7 +136,7 @@ class BookRestControllerTest extends AbstractTest {
                 .queryParam("fakeParam", "fakeValue")
                 .get("/books");
         response.then().statusCode(200);
-        PageResultDTO pageResultDTO = response.as(PageResultDTO.class);
+        PageResultDTO<?> pageResultDTO = response.as(PageResultDTO.class);
         assertThat(pageResultDTO.getSize()).isEqualTo(DEFAULT_PAGE_SIZE);
         assertThat(pageResultDTO.getTotalElements()).isEqualTo(REAL_BOOKS_AMOUNT);
         assertThat(pageResultDTO.getTotalPages()).isEqualTo(DEFAULT_TOTAL_PAGES);
@@ -255,7 +254,7 @@ class BookRestControllerTest extends AbstractTest {
                 .queryParam("bookPage", REAL_BOOK_PAGES)
                 .queryParam("bookCategory", REAL_BOOK_CATEGORY)
                 .queryParam("bookAuthorName", REAL_AUTHOR_NAME)
-               // .queryParam("bookAuthorSurname", REAL_AUTHOR_SURNAME)
+                // .queryParam("bookAuthorSurname", REAL_AUTHOR_SURNAME)
                 .get("/books/");
         response.then().statusCode(200);
 
@@ -283,17 +282,19 @@ class BookRestControllerTest extends AbstractTest {
 
         Response postResponse = given()
                 .body(newBook)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .post("/books");
         postResponse.then()
                 .statusCode(201);
 
         BookDTO savedBook = postResponse.as(BookDTO.class);
+        assertThat(savedBook.getId()).isEqualTo(NEW_BOOK_ID);
         assertThat(savedBook.getBookIsbn()).isEqualTo(NEW_BOOK_ISBN);
         assertThat(savedBook.getBookTitle()).isEqualTo(NEW_BOOK_TITLE);
         assertThat(savedBook.getBookCategory()).isEqualTo(NEW_BOOK_CATEGORY);
+        assertThat(savedBook.getBookPages()).isEqualTo(NEW_BOOK_PAGES);
         assertThat(savedBook.getBookAuthor().getAuthorName()).isEqualTo(REAL_AUTHOR_NAME);
         assertThat(savedBook.getBookAuthor().getAuthorSurname()).isEqualTo(REAL_AUTHOR_SURNAME);
         assertThat(savedBook.getBookAuthor().getAuthorAge()).isEqualTo(REAL_AUTHOR_AGE);
@@ -316,8 +317,8 @@ class BookRestControllerTest extends AbstractTest {
 
         Response postResponse = given()
                 .body(newBook)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .post("/books");
         postResponse.then().statusCode(400);
@@ -340,8 +341,8 @@ class BookRestControllerTest extends AbstractTest {
 
         Response postResponse = given()
                 .body(newBook)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .post("/books");
         postResponse.then().statusCode(400);
@@ -364,8 +365,8 @@ class BookRestControllerTest extends AbstractTest {
 
         Response postResponse = given()
                 .body(newBook)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .post("/books");
         postResponse.then().statusCode(400);
@@ -422,8 +423,8 @@ class BookRestControllerTest extends AbstractTest {
 
         Response putResponse = given()
                 .body(newBook)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .put("/books/" + REAL_BOOK_ID);
 
@@ -450,8 +451,8 @@ class BookRestControllerTest extends AbstractTest {
 
         Response putResponse = given()
                 .body(newBookData)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .put("/books/" + FAKE_BOOK_ID);
         putResponse.then().statusCode(404);
@@ -475,12 +476,12 @@ class BookRestControllerTest extends AbstractTest {
 
         Response putResponse = given()
                 .body(newBookData)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(ACCEPT, MediaType.APPLICATION_JSON)
                 .when()
                 .put("/books/" + REAL_BOOK_ID);
 
-        putResponse.then().statusCode(500);
+        putResponse.then().statusCode(400);
 
         RFCProblemDTO rfcProblemDTO = putResponse.as(RFCProblemDTO.class);
         Assertions.assertThat(rfcProblemDTO.getStatus().toString()).hasToString("400");

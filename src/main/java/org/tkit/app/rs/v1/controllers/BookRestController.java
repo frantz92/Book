@@ -46,7 +46,7 @@ public class BookRestController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "createBook", description = "Adds new book")
-    public Response createBook(BookDTO bookDTO) {
+    public Response createBook(@Valid BookDTO bookDTO) {
 
         return Response.status(Response.Status.CREATED)
                 .entity(bookServiceImpl.createBook(bookDTO))

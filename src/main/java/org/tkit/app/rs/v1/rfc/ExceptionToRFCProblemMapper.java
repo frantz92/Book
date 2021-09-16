@@ -88,12 +88,12 @@ public class ExceptionToRFCProblemMapper implements ExceptionMapper<Exception> {
      */
     private Response createResponse(RestException restException) {
         RFCProblemDTO rfcProblemDTO = RFCProblemDTO.builder()
-                                                   .type(RFCProblemType.REST_EXCEPTION.name())
-                                                   .title(TECHNICAL_ERROR)
-                                                   .status(restException.getStatus().getStatusCode())
-                                                   .detail(restException.getParameters().get(0).toString())
-                                                   .problems(createRfcProblemDetailDTOs(restException.getCause()))
-                                                   .build();
+                .type(RFCProblemType.REST_EXCEPTION.name())
+                .title(TECHNICAL_ERROR)
+                .status(restException.getStatus().getStatusCode())
+                .detail(restException.getParameters().get(0).toString())
+                .problems(createRfcProblemDetailDTOs(restException.getCause()))
+                .build();
 
         return Response
                 .status(Response.Status.NOT_FOUND)
