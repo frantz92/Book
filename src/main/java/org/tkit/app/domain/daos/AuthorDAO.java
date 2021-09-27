@@ -41,12 +41,12 @@ public class AuthorDAO extends AbstractDAO<Author> {
             List<Predicate> authorPredicates = new ArrayList<>();
             CriteriaBuilder authorCB = getEntityManager().getCriteriaBuilder();
 
-            if (criteria.getAuthorName() != null) {
-                authorPredicates.add(authorCB.equal(authorRoot.get("authorName"), criteria.getAuthorName()));
+            if (criteria.getAuthorName() != null && !criteria.getAuthorName().isEmpty()) {
+                authorPredicates.add(authorCB.like(authorCB.lower(authorRoot.get("authorName")), criteria.getAuthorName().toLowerCase() + "%"));
             }
 
-            if (criteria.getAuthorSurname() != null) {
-                authorPredicates.add(authorCB.equal(authorRoot.get("authorSurname"), criteria.getAuthorSurname()));
+            if (criteria.getAuthorSurname() != null && !criteria.getAuthorSurname().isEmpty()) {
+                authorPredicates.add(authorCB.like(authorCB.lower(authorRoot.get("authorSurname")), criteria.getAuthorSurname().toLowerCase() + "%"));
             }
 
             if (criteria.getAuthorAge() != null) {

@@ -23,7 +23,7 @@ import static org.jboss.resteasy.util.HttpHeaderNames.ACCEPT;
 import static org.jboss.resteasy.util.HttpHeaderNames.CONTENT_TYPE;
 
 @QuarkusTest
-@WithDBData(value = {"data/book-controller-test-data.xls"},
+@WithDBData(value = {"data/controllers-test-data.xls"},
         deleteBeforeInsert = true,
         rinseAndRepeat = true)
 class BookRestControllerTest extends AbstractTest {
@@ -254,7 +254,7 @@ class BookRestControllerTest extends AbstractTest {
                 .queryParam("bookPage", REAL_BOOK_PAGES)
                 .queryParam("bookCategory", REAL_BOOK_CATEGORY)
                 .queryParam("bookAuthorName", REAL_AUTHOR_NAME)
-                // .queryParam("bookAuthorSurname", REAL_AUTHOR_SURNAME)
+                .queryParam("bookAuthorSurname", REAL_AUTHOR_SURNAME)
                 .get("/books/");
         response.then().statusCode(200);
 
