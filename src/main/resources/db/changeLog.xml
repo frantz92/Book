@@ -1,0 +1,67 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="dev (generated)" id="1632475588517-1">
+        <createTable tableName="books">
+            <column name="guid" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="books_pkey"/>
+            </column>
+            <column name="creationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="creationuser" type="VARCHAR(255)"/>
+            <column name="modificationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modificationuser" type="VARCHAR(255)"/>
+            <column name="optlock" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_category" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_isbn" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_pages" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_guid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dev (generated)" id="1632475588517-2">
+        <createTable tableName="authors">
+            <column name="guid" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="authors_pkey"/>
+            </column>
+            <column name="creationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="creationuser" type="VARCHAR(255)"/>
+            <column name="modificationdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modificationuser" type="VARCHAR(255)"/>
+            <column name="optlock" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_age" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_surname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dev (generated)" id="1632475588517-3">
+        <addUniqueConstraint columnNames="book_isbn" constraintName="uk_tf3xph4b20i9jgkt8p0tig1jo" tableName="books"/>
+    </changeSet>
+    <changeSet author="dev (generated)" id="1632475588517-4">
+        <addForeignKeyConstraint baseColumnNames="author_guid" baseTableName="books"
+                                 constraintName="fk92pthqif4xbcmkkwjra8n4hjj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="guid" referencedTableName="authors" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
